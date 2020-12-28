@@ -167,7 +167,7 @@ function VamVideo(vp, attrObj, styleObj) {
       $(".pv-dot").style.left = L + "px";
       let scale = L / ($(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth);
       $(".video-player").currentTime = scale * $(".video-player").duration;
-      this.nowTime();
+      nowTime();
     };
     document.onmouseup = function () {
       document.onmousemove = null;
