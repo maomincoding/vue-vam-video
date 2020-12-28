@@ -44,13 +44,6 @@ function VamVideo(vp, attrObj, styleObj) {
     const iS = toZero(Math.floor(iN % 60));
     return iH + ":" + iM + ":" + iS;
   }
-  function toZero(num) {
-    if (num <= 9) {
-      return "0" + num;
-    } else {
-      return "" + num;
-    }
-  }
   this.showEl = function (el) {
     $(el).style.display = "block";
   };
