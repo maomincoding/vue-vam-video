@@ -89,6 +89,24 @@ export default {
         ? this.defaultStyle
         : this.videoStyle
     );
+    if (
+      this.properties.src.substr(
+        this.properties.src.length - 4,
+        this.properties.src.length
+      ) === "m3u8"
+    ) {
+      var hls = new Hls();
+      hls.loadSource(this.properties.src);
+      hls.attachMedia(document.querySelector(".video-player"));
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        console.log("加载成功");
+      });
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        console.log(event, data);
+        // 监听出错事件
+        console.log("加载失败");
+      });
+    }
   },
 };
 </script>

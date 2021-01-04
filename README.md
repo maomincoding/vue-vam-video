@@ -40,5 +40,10 @@ export default {
   })
 };
 </script>
+```
+3. Support m3u8 video format
 
+You need to install the following dependencies.
+```
+npm install hls.js --save
 ```
