@@ -2,14 +2,16 @@
 > Vue.js Custom video components
 
 ## Using documents
-1. Introducing components
-2. configuration parameter
+### 1. Introducing components
+### 2. configuration parameter
 
 - `properties`: Video properties.
 
 - `videoStyle`: Video style.
 
 These two parameters need to be set separately.
+
+Examples are as follows：
 ```html
 <template>
   <div id="app">
@@ -41,7 +43,7 @@ export default {
 };
 </script>
 ```
-3. Support m3u8 video format
+### 3. Support m3u8 video format
 
 You need to install the following dependencies.
 ```

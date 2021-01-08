@@ -1,7 +1,7 @@
 <template>
   <div
     class="video-box"
-    @mouseenter="vp.bottomTup()"
+    @mousemove="vp.bottomTup()"
     @mouseleave="vp.bottomTdow()"
   >
     <video
@@ -10,7 +10,7 @@
       @ended="vp.useEnd()"
       @click="vp.isplay()"
     ></video>
-    <div class="bottom-tool">
+    <div class="bottom-tool" @mousemove="vp.clearVb()">
       <div class="pv-bar">
         <div class="pv-played"></div>
         <div class="pv-dot" @mousedown="vp.useTime()"></div>
@@ -22,9 +22,9 @@
             <i class="iconfont icon-zanting hide"></i>
           </div>
           <div class="pv-time">
-            <span class="pv-currentTime">00:00:00</span>
-            <span>/</span>
-            <span class="pv-duration">00:00:00</span>
+            <p class="pv-currentTime">00:00:00</p>
+            <p>/</p>
+            <p class="pv-duration">00:00:00</p>
           </div>
         </div>
         <div class="pc-con-r">
@@ -48,13 +48,17 @@
               <li>2x</li>
             </ul>
           </div>
-          <div class="pv-screen ml" @click="vp.pageFullScreen()">
+          <div
+            class="pv-screen ml"
+            @click="vp.pageFullScreen()"
+            v-show="screen"
+          >
             <i class="iconfont icon-quanping"></i>
             <i class="iconfont icon-huanyuan hide"></i>
           </div>
           <div class="pv-screens ml" @click="vp.fullScreen()">
-            <i class="iconfont icon-shipinquanping"></i>
-            <i class="iconfont icon-tuichuquanping hide"></i>
+            <i class="iconfont icon-shipinquanping" v-show="shipinquanping"></i>
+            <i class="iconfont icon-tuichuquanping" v-show="tuichuquanping"></i>
           </div>
         </div>
       </div>
@@ -63,11 +67,15 @@
 </template>
 
 <script>
+import Hls from "hls.js";
 import VamVideo from "./vp.js";
 export default {
   name: "VamVideo",
   data: () => ({
     vp: null,
+    screen: true,
+    shipinquanping: true,
+    tuichuquanping: false,
     defaultStyle: {
       width: "1200px",
       height: "600px",
@@ -81,6 +89,19 @@ export default {
       type: Object,
     },
   },
+  methods: {
+    full() {
+      if (document.fullscreenElement) {
+        this.tuichuquanping = true;
+        this.shipinquanping = false;
+        this.screen = false;
+      } else {
+        this.tuichuquanping = false;
+        this.shipinquanping = true;
+        this.screen = true;
+      }
+    },
+  },
   mounted() {
     this.vp = new VamVideo(
       document.querySelector(".video-box"),
@@ -89,6 +110,7 @@ export default {
         ? this.defaultStyle
         : this.videoStyle
     );
+    document.addEventListener("fullscreenchange", this.full, true);
     if (
       this.properties.src.substr(
         this.properties.src.length - 4,
@@ -107,6 +129,9 @@ export default {
         console.log("加载失败");
       });
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener("fullscreenchange", this.full, true);
   },
 };
 </script>

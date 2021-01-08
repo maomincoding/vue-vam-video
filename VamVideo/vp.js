@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 function VamVideo(vp, attrObj, styleObj) {
   this.timer = null;
+  this.dd = null;
   this.disX = 0;
   this.disL = 0;
   this.isPageFullScreen = false;
@@ -62,9 +63,18 @@ function VamVideo(vp, attrObj, styleObj) {
   // 底部控制栏(显示/隐藏)
   this.bottomTup = function () {
     $(".bottom-tool").style.bottom = "0px";
+    clearTimeout(this.dd);
+    this.dd = setTimeout(() => {
+      this.bottomTdow();
+    }, 4000);
   };
   this.bottomTdow = function () {
+    this.clearVb();
     $(".bottom-tool").style.bottom = "-45px";
+  };
+  this.clearVb = function () {
+    clearTimeout(this.dd);
+    this.dd = null;
   };
   // 播放/暂停
   this.usePlay = function () {
@@ -125,6 +135,7 @@ function VamVideo(vp, attrObj, styleObj) {
       this.showEl(".pv-screens");
     }
   };
+  // 视频全屏
   this.fullScreen = function () {
     const el = $(".video-box");
     const isFullscreen =
@@ -132,17 +143,11 @@ function VamVideo(vp, attrObj, styleObj) {
       document.mozFullScreen ||
       document.webkitIsFullScreen;
     if (!isFullscreen) {
-      this.showEl(".icon-tuichuquanping");
-      this.hideEl(".icon-shipinquanping");
-      this.hideEl(".pv-screen");
       (el.requestFullscreen && el.requestFullscreen()) ||
         (el.mozRequestFullScreen && el.mozRequestFullScreen()) ||
         (el.webkitRequestFullscreen && el.webkitRequestFullscreen()) ||
         (el.msRequestFullscreen && el.msRequestFullscreen());
     } else {
-      this.showEl(".icon-shipinquanping");
-      this.hideEl(".icon-tuichuquanping");
-      this.showEl(".pv-screen");
       document.exitFullscreen
         ? document.exitFullscreen()
         : document.mozCancelFullScreen
