@@ -4,16 +4,27 @@
     @mousemove="vp.bottomTup()"
     @mouseleave="vp.bottomTdow()"
   >
+    <load
+      :radius="40"
+      :progress="0"
+      :stroke="6"
+      :color="'#1989fa'"
+      v-show="show"
+      class="loading"
+    ></load>
     <video
       class="video-player"
       @canplay="vp.useOnplay()"
       @ended="vp.useEnd()"
       @click="vp.isplay()"
+      @waiting="wait"
+      @canplaythrough="canplay"
     ></video>
     <div class="bottom-tool" @mousemove="vp.clearVb()">
       <div class="pv-bar">
-        <div class="pv-played"></div>
-        <div class="pv-dot" @mousedown="vp.useTime()"></div>
+        <div class="pv-played">
+          <div class="pv-dot" @mousedown="vp.useTime()"></div>
+        </div>
       </div>
       <div class="pv-controls">
         <div class="pc-con-l">
@@ -69,10 +80,15 @@
 <script>
 import Hls from "hls.js";
 import VamVideo from "./vp.js";
+import load from "./load.vue";
 export default {
   name: "VamVideo",
+  components: {
+    load,
+  },
   data: () => ({
     vp: null,
+    show: true,
     screen: true,
     shipinquanping: true,
     tuichuquanping: false,
@@ -90,6 +106,14 @@ export default {
     },
   },
   methods: {
+    wait() {
+      console.log("播放暂停，等待下载更多数据");
+      this.show = true;
+    },
+    canplay() {
+      console.log("播放继续");
+      this.show = false;
+    },
     full() {
       if (document.fullscreenElement) {
         this.tuichuquanping = true;

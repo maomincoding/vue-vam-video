@@ -28,7 +28,7 @@ function VamVideo(vp, attrObj, styleObj) {
     $(".pv-currentTime").innerHTML = changeTime($(".video-player").currentTime);
     let scale = $(".video-player").currentTime / $(".video-player").duration;
     let w = $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
-    $(".pv-dot").style.left = scale * w + "px";
+    $(".pv-dot").style.left = scale * w - 7 + "px";
     $(".pv-played").style.width = scale * w + "px";
   }
   function toZero(num) {
@@ -163,13 +163,13 @@ function VamVideo(vp, attrObj, styleObj) {
     this.disX = ev1.clientX - $(".pv-dot").offsetLeft;
     document.onmousemove = (ev) => {
       let ev2 = ev || window.event;
-      let L = ev2.clientX - this.disX;
+      let L = ev2.clientX - this.disX + 7;
       if (L < 0) {
         L = 0;
       } else if (L > $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth) {
         L = $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
       }
-      $(".pv-dot").style.left = L + "px";
+      $(".pv-dot").style.left = (L - 7) + "px";
       let scale = L / ($(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth);
       $(".video-player").currentTime = scale * $(".video-player").duration;
       nowTime();

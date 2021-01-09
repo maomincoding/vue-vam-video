@@ -3,11 +3,12 @@ li { list-style: none; }
 .hide { display: none; }
 .ml { margin-left: 25px; }
 .video-box { position: relative; width: 1200px; height: 600px; margin: 0 auto; object-fit: contain; overflow: hidden; box-sizing: inherit; background: #000; }
+.loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 .video-player { width: 100%; height: 100%; overflow: hidden; border: 0; z-index: 100; }
-.pv-bar { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.35); overflow: hidden; position: relative; }
+.pv-bar { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.35);  position: relative; }
 .pv-bar:hover{ height: 10px; }
-.pv-played { width: 0px; height: 100%; background: rgba(72, 133, 240, 1); }
-.pv-dot { display: none; width: 10px; height: 100%; background: #fff; position: absolute; left: 0; top: 0; }
+.pv-played { width: 0px; height: 100%; position: relative; background: rgba(72, 133, 240, 1); }
+.pv-dot { display: none; width: 14px; height: 14px; background: #fff; position: absolute; top: -2px; border-radius:50%; box-shadow: 0px 0px 10px #f4f4f4; }
 .pv-bar:hover .pv-dot { display: block; }
 .pv-dot:hover { cursor: pointer; }
 .bottom-tool { width: 100%; position: absolute; z-index: 2147483647; bottom: 0px; transition: all 1s; background: rgba(0, 16, 27, 0.7); }
