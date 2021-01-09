@@ -3,6 +3,9 @@
 
 ## Using documents
 ### 1. Introducing components
+```
+npm install vue-vam-video
+```
 ### 2. configuration parameter
 
 - `properties`: Video properties.
