@@ -10,17 +10,24 @@
       :stroke="6"
       :color="'#1989fa'"
       v-show="show"
-      class="loading"
+      class="mz"
     ></load>
+    <div class="mz" v-show="!show">
+      <i
+        class="iconfont icon-bofang"
+        style="font-size: 58px; z-index: 1000"
+        @click="vp.isplay()"
+      ></i>
+      <i class="iconfont icon-zanting hide fain" style="font-size: 58px"></i>
+    </div>
     <video
       class="video-player"
       @canplay="vp.useOnplay()"
       @ended="vp.useEnd()"
-      @click="vp.isplay()"
       @waiting="wait"
       @canplaythrough="canplay"
     ></video>
-    <div class="bottom-tool" @mousemove="vp.clearVb()">
+    <div class="bottom-tool" @mousemove="vp.clearVb()" >
       <div class="pv-bar">
         <div class="pv-played">
           <div class="pv-dot" @mousedown="vp.useTime()"></div>
@@ -28,9 +35,12 @@
       </div>
       <div class="pv-controls">
         <div class="pc-con-l">
-          <div class="play-btn" @click="vp.usePlay()">
-            <i class="iconfont icon-bofang"></i>
-            <i class="iconfont icon-zanting hide"></i>
+          <div class="play-btn" @click="vp.usePlay()" v-show="!show">
+            <i class="iconfont icon-bofang" :title="controls.playTit"></i>
+            <i
+              class="iconfont icon-zanting hide"
+              :title="controls.pauseTit"
+            ></i>
           </div>
           <div class="pv-time">
             <p class="pv-currentTime">00:00:00</p>
@@ -39,18 +49,24 @@
           </div>
         </div>
         <div class="pc-con-r">
-          <div class="pv-listen ml">
+          <div class="pv-listen ml" v-if="controls.listen">
             <div class="pv-yl">
               <p class="pv-ol" @mousedown="vp.useListen()"></p>
               <p class="pv-bg"></p>
             </div>
             <div class="pv-iconyl" @click="vp.useVolume()">
-              <i class="iconfont icon-yinliang"></i>
-              <i class="iconfont icon-jingyin hide"></i>
+              <i
+                class="iconfont icon-yinliang"
+                :title="controls.yinliangTit"
+              ></i>
+              <i
+                class="iconfont icon-jingyin hide"
+                :title="controls.jingyinTit"
+              ></i>
             </div>
           </div>
-          <div class="pv-speed ml">
-            <p class="pv-spnum">1x</p>
+          <div class="pv-speed ml" v-if="controls.speed">
+            <p class="pv-spnum" :title="controls.speedTit">1x</p>
             <ul class="selectList" @click="vp.useSpnum()">
               <li>0.5x</li>
               <li>1x</li>
@@ -63,13 +79,32 @@
             class="pv-screen ml"
             @click="vp.pageFullScreen()"
             v-show="screen"
+            v-if="controls.pageFullScreen"
           >
-            <i class="iconfont icon-quanping"></i>
-            <i class="iconfont icon-huanyuan hide"></i>
+            <i
+              class="iconfont icon-quanping"
+              :title="controls.pageFullScreenTit"
+            ></i>
+            <i
+              class="iconfont icon-huanyuan hide"
+              :title="controls.escPageFullScreenTit"
+            ></i>
           </div>
-          <div class="pv-screens ml" @click="vp.fullScreen()">
-            <i class="iconfont icon-shipinquanping" v-show="shipinquanping"></i>
-            <i class="iconfont icon-tuichuquanping" v-show="tuichuquanping"></i>
+          <div
+            class="pv-screens ml"
+            @click="vp.fullScreen()"
+            v-if="controls.fullScreen"
+          >
+            <i
+              class="iconfont icon-shipinquanping"
+              v-show="shipinquanping"
+              :title="controls.fullScreenTit"
+            ></i>
+            <i
+              class="iconfont icon-tuichuquanping"
+              v-show="tuichuquanping"
+              :title="controls.EscfullScreenTit"
+            ></i>
           </div>
         </div>
       </div>
@@ -97,11 +132,19 @@ export default {
       height: "600px",
     },
   }),
+  computed: {
+    controls: function () {
+      return this.controlsConfig ? this.controlsConfig : false;
+    },
+  },
   props: {
     properties: {
       type: Object,
     },
     videoStyle: {
+      type: Object,
+    },
+    controlsConfig: {
       type: Object,
     },
   },
@@ -127,15 +170,41 @@ export default {
     },
   },
   mounted() {
-    this.vp = new VamVideo(
-      document.querySelector(".video-box"),
-      this.properties,
-      Object.keys(this.videoStyle).length === 0
-        ? this.defaultStyle
-        : this.videoStyle
-    );
+    if (this.properties && this.videoStyle) {
+      this.vp = new VamVideo(
+        document.querySelector(".video-box"),
+        this.properties,
+        Object.keys(this.videoStyle).length === 0
+          ? this.defaultStyle
+          : this.videoStyle
+      );
+    } else if (this.properties) {
+      this.vp = new VamVideo(
+        document.querySelector(".video-box"),
+        this.properties
+      );
+    } else if (this.videoStyle) {
+      this.vp = new VamVideo(
+        document.querySelector(".video-box"),
+        null,
+        Object.keys(this.videoStyle).length === 0
+          ? this.defaultStyle
+          : this.videoStyle
+      );
+    } else {
+      this.vp = new VamVideo(document.querySelector(".video-box"));
+    }
+
     document.addEventListener("fullscreenchange", this.full, true);
+    document.addEventListener("keydown", (ev) => {
+      console.log(ev.which);
+      if (ev.which === 32) {
+        this.vp.usePlay();
+      }
+    });
     if (
+      this.properties &&
+      this.properties.src &&
       this.properties.src.substr(
         this.properties.src.length - 4,
         this.properties.src.length

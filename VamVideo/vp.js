@@ -5,22 +5,27 @@ function VamVideo(vp, attrObj, styleObj) {
   this.disX = 0;
   this.disL = 0;
   this.isPageFullScreen = false;
-  for (const key in attrObj) {
-    if (Object.hasOwnProperty.call(attrObj, key) && key !== "controls") {
-      $(".video-player").setAttribute(key, attrObj[key]);
+  if (attrObj) {
+    for (const key in attrObj) {
+      if (Object.hasOwnProperty.call(attrObj, key) && key !== "controls") {
+        $(".video-player").setAttribute(key, attrObj[key]);
+      }
     }
   }
-  for (const key in styleObj) {
-    if (Object.hasOwnProperty.call(styleObj, key)) {
-      $(".video-box").style[`${key}`] = styleObj[key];
-      key === "width"
-        ? (this.vbw = styleObj.width)
-        : (this.vbw = vp.offsetWidth);
-      key === "height"
-        ? (this.vbh = styleObj.height)
-        : (this.vbh = vp.offsetHeight);
+  if (styleObj) {
+    for (const key in styleObj) {
+      if (Object.hasOwnProperty.call(styleObj, key)) {
+        $(".video-box").style[`${key}`] = styleObj[key];
+        key === "width"
+          ? (this.vbw = styleObj.width)
+          : (this.vbw = vp.offsetWidth);
+        key === "height"
+          ? (this.vbh = styleObj.height)
+          : (this.vbh = vp.offsetHeight);
+      }
     }
   }
+
   function $(el) {
     return document.querySelector(el);
   }
@@ -80,14 +85,18 @@ function VamVideo(vp, attrObj, styleObj) {
   this.usePlay = function () {
     if ($(".video-player").paused) {
       $(".video-player").play();
-      this.hideEl(".icon-bofang");
-      this.showEl(".icon-zanting");
+      this.hideEl(".play-btn .icon-bofang");
+      this.hideEl(".mz .icon-bofang");
+      this.showEl(".play-btn .icon-zanting");
+      this.showEl(".mz .icon-zanting");
       nowTime();
       this.timer = setInterval(nowTime, 1000);
     } else {
       $(".video-player").pause();
-      this.showEl(".icon-bofang");
-      this.hideEl(".icon-zanting");
+      this.showEl(".play-btn .icon-bofang");
+      this.showEl(".mz .icon-bofang");
+      this.hideEl(".play-btn .icon-zanting");
+      this.hideEl(".mz .icon-zanting");
       clearInterval(this.timer);
     }
   };
@@ -169,7 +178,7 @@ function VamVideo(vp, attrObj, styleObj) {
       } else if (L > $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth) {
         L = $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
       }
-      $(".pv-dot").style.left = (L - 7) + "px";
+      $(".pv-dot").style.left = L - 7 + "px";
       let scale = L / ($(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth);
       $(".video-player").currentTime = scale * $(".video-player").duration;
       nowTime();
