@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { h } from 'vue';
+const isVue3 = typeof h === 'function';
 export default {
   name: "load",
   props: {
@@ -46,10 +48,10 @@ export default {
       }
       this.colored = "#1989fa";
     }, 150);
-  },
-  beforeDestroy() {
-    clearInterval(this.interval);
-    this.interval = null;
+    this.$once(`hook:${isVue3?'onBeforeUnmount':'beforeDestory'}`, () => {
+      clearInterval(this.interval);
+      this.interval = null;
+    });
   },
   computed: {
     strokeDashoffset() {

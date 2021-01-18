@@ -27,7 +27,7 @@
       @waiting="wait"
       @canplaythrough="canplay"
     ></video>
-    <div class="bottom-tool" @mousemove="vp.clearVb()" >
+    <div class="bottom-tool" @mousemove="vp.clearVb()">
       <div class="pv-bar">
         <div class="pv-played">
           <div class="pv-dot" @mousedown="vp.useTime()"></div>
@@ -113,7 +113,8 @@
 </template>
 
 <script>
-import Hls from "hls.js";
+import { h } from 'vue';
+const isVue3 = typeof h === 'function';
 import VamVideo from "./vp.js";
 import load from "./load.vue";
 export default {
@@ -167,9 +168,49 @@ export default {
         this.shipinquanping = true;
         this.screen = true;
       }
+      this.$once(`hook:${isVue3?'onBeforeUnmount':'beforeDestory'}`, () => {
+        window.removeEventListener("fullscreenchange", this.full, true);
+      });
+    },
+    keydown(ev) {
+      if (ev.keyCode === 32) {
+        this.vp.usePlay();
+      }
+      this.$once(`hook:${isVue3?'onBeforeUnmount':'beforeDestory'}`, () => {
+        window.removeEventListener("keydown", this.keydown, true);
+      });
+    },
+    onhls() {
+      // 创建script标签，引入外部文件
+      let script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "https://cdn.jsdelivr.net/hls.js/latest/hls.min.js";
+      document.getElementsByTagName("head")[0].appendChild(script);
+      script.onload = () => {
+        console.log("hls.js资源加载成功");
+        // eslint-disable-next-line no-undef
+        var hls = new Hls();
+        hls.loadSource(this.properties.src);
+        hls.attachMedia(document.querySelector(".video-player"));
+        // eslint-disable-next-line no-undef
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          console.log("加载成功");
+        });
+        // eslint-disable-next-line no-undef
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          console.log(event, data);
+          // 监听出错事件
+          console.log("加载失败");
+        });
+      };
+      script.onerror = function () {
+        console.log("hls.js资源加载失败");
+      };
     },
   },
   mounted() {
+    document.addEventListener("fullscreenchange", this.full, true);
+    document.addEventListener("keydown", this.keydown, true);
     if (this.properties && this.videoStyle) {
       this.vp = new VamVideo(
         document.querySelector(".video-box"),
@@ -194,14 +235,6 @@ export default {
     } else {
       this.vp = new VamVideo(document.querySelector(".video-box"));
     }
-
-    document.addEventListener("fullscreenchange", this.full, true);
-    document.addEventListener("keydown", (ev) => {
-      console.log(ev.which);
-      if (ev.which === 32) {
-        this.vp.usePlay();
-      }
-    });
     if (
       this.properties &&
       this.properties.src &&
@@ -210,21 +243,8 @@ export default {
         this.properties.src.length
       ) === "m3u8"
     ) {
-      var hls = new Hls();
-      hls.loadSource(this.properties.src);
-      hls.attachMedia(document.querySelector(".video-player"));
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        console.log("加载成功");
-      });
-      hls.on(Hls.Events.ERROR, (event, data) => {
-        console.log(event, data);
-        // 监听出错事件
-        console.log("加载失败");
-      });
+      this.onhls();
     }
-  },
-  beforeDestroy() {
-    window.removeEventListener("fullscreenchange", this.full, true);
   },
 };
 </script>

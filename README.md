@@ -2,11 +2,11 @@
 > Vue.js Custom video components
 
 ## Using documents
-### 1. Introducing components
+#### 1. Introducing components
 ```
 npm install vue-vam-video
 ```
-### 2. configuration parameter
+#### 2. configuration parameter
 
 - `properties`: Video properties.
 
@@ -14,7 +14,12 @@ npm install vue-vam-video
 
 - `controlsConfig`: Video control settings.
 
-Examples are as follows：
+#### 3. Support m3u8 video format
+No need to install any dependencies, the introduction of m3u8 link can play.
+
+#### 4. Support for Vue 2 & Vue 3
+
+## Examples are as follows
 ```html
 <template>
   <div id="app">
@@ -70,9 +75,4 @@ export default {
 </script>
 
 ```
-### 3. Support m3u8 video format
 
-You need to install the following dependencies.
-```
-npm install hls.js --save
-```
