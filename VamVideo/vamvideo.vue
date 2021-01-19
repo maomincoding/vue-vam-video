@@ -115,6 +115,8 @@
 <script>
 import { h } from 'vue';
 const isVue3 = typeof h === 'function';
+import {v2index} from './mixinv2.js'
+import {v3index} from './mixinv3.js'
 import VamVideo from "./vp.js";
 import load from "./load.vue";
 export default {
@@ -122,6 +124,7 @@ export default {
   components: {
     load,
   },
+   mixins:[isVue3?v3index:v2index],
   data: () => ({
     vp: null,
     show: true,
@@ -168,17 +171,11 @@ export default {
         this.shipinquanping = true;
         this.screen = true;
       }
-      this.$once(`hook:${isVue3?'onBeforeUnmount':'beforeDestory'}`, () => {
-        window.removeEventListener("fullscreenchange", this.full, true);
-      });
     },
     keydown(ev) {
       if (ev.keyCode === 32) {
         this.vp.usePlay();
       }
-      this.$once(`hook:${isVue3?'onBeforeUnmount':'beforeDestory'}`, () => {
-        window.removeEventListener("keydown", this.keydown, true);
-      });
     },
     onhls() {
       // 创建script标签，引入外部文件

@@ -17,6 +17,8 @@
 
 <script>
 import { h } from 'vue';
+import {v2load} from './mixinv2.js'
+import {v3load} from './mixinv3.js'
 const isVue3 = typeof h === 'function';
 export default {
   name: "load",
@@ -26,11 +28,12 @@ export default {
     stroke: Number,
     color: String,
   },
+  mixins:[isVue3?v3load:v2load],
   data() {
     const progressed = this.progress;
     const colored = this.color;
-    const normalizedRadius = this.radius - this.stroke * 2; // 净半径，总半径-2*路径宽
-    const circumference = normalizedRadius * 2 * Math.PI; // 周长，2πd
+    const normalizedRadius = this.radius - this.stroke * 2;
+    const circumference = normalizedRadius * 2 * Math.PI;
     return {
       interval: null,
       normalizedRadius,
@@ -39,8 +42,8 @@ export default {
       colored,
     };
   },
-  mounted() {
-    // emulating progress
+  methods:{
+    timer(){
     this.interval = setInterval(() => {
       this.progressed += 25;
       if (this.progressed > 101) {
@@ -48,10 +51,11 @@ export default {
       }
       this.colored = "#1989fa";
     }, 150);
-    this.$once(`hook:${isVue3?'onBeforeUnmount':'beforeDestory'}`, () => {
-      clearInterval(this.interval);
-      this.interval = null;
-    });
+    }
+  },
+  mounted() {
+    this.timer();
+    console.log(this)
   },
   computed: {
     strokeDashoffset() {
@@ -62,19 +66,7 @@ export default {
 </script>
 
 <style scoped>
-circle {
-  transition: stroke-dashoffset 0.15s;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-}
-.txt {
-  font-size: 14px;
-  text-align: center;
-  color: #333;
-}
-.loading {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
+circle { transition: stroke-dashoffset 0.15s; transform: rotate(-90deg); transform-origin: 50% 50%; }
+.txt { font-size: 14px; text-align: center; color: #333; }
+.loading { display: flex; justify-content: center; align-content: center; }
 </style>>
