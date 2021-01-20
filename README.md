@@ -2,11 +2,11 @@
 > Vue.js Custom video components
 
 ## Using documents
-#### 1. Introducing components
+### 1. Introducing components
 ```
 npm install vue-vam-video
 ```
-#### 2. configuration parameter
+### 2. configuration parameter
 
 - `properties`: Video properties.
 
@@ -14,10 +14,29 @@ npm install vue-vam-video
 
 - `controlsConfig`: Video control settings.
 
-#### 3. Support m3u8 video format
+### 3. Support m3u8 video format
 No need to install any dependencies, the introduction of m3u8 link can play.
 
-#### 4. Support for Vue 2 & Vue 3
+### 4. Support for Vue 2 & Vue 3
+
+### 5. Support events
+|  Event name   | When to trigger |
+|  ----  | ----  |
+| play | The media has received a request to start playing |
+| pause  | Playback has been suspended |
+| canplay  | Playback can start |
+| ended  | The media has played once and stopped |
+| waiting  | Pause playback to download more data |
+| canplaythrough  | Playback can continue and should not be interrupted. Readstate is 3 |
+| error  | A network error occurred during the download |
+| volumechange  | The value of the volume or muted property has changed |
+| emptied  | The network connection is down |
+| ratechange  | Media playback rate changes |
+| empty  | An error occurred, blocking media download |
+| seeking  | Playback has moved to a new location |
+| timeupdate  | The current time was changed unconventionally or unexpectedly |
+| stalled  | The browser tried to download but has not received data yet |
+| abort  | Download interrupted |
 
 ## Examples are as follows
 ```html
@@ -27,6 +46,9 @@ No need to install any dependencies, the introduction of m3u8 link can play.
       :properties="videoOption.properties"
       :videoStyle="videoOption.videoStyle"
       :controlsConfig="videoOption.controlsConfig"
+      @play="playVideo"
+      @canplay="canplayVideo"
+      @pause="pauseVideo"
     ></vam-video>
   </div>
 </template>
@@ -70,9 +92,19 @@ export default {
         listen:true
       }
     },
-  })
+  }),
+  methods:{
+    playVideo(){
+      console.log("play");
+    },
+    pauseVideo(){
+      console.log("pause");
+    },
+    canplayVideo(){
+      console.log("canplay");
+    }
+  }
 };
 </script>
-
 ```
 

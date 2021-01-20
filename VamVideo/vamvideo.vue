@@ -22,10 +22,21 @@
     </div>
     <video
       class="video-player"
-      @canplay="vp.useOnplay()"
-      @ended="vp.useEnd()"
-      @waiting="wait"
-      @canplaythrough="canplay"
+      @canplay="canplayVd"
+      @ended="endedVd"
+      @waiting="waitingVd"
+      @canplaythrough="canplaythroughVd"
+      @play="playVd"
+      @pause="pauseVd"
+      @error="errorVd"
+      @volumechange="volumechangeVd"
+      @emptied="emptiedVd"
+      @ratechange="ratechangeVd"
+      @empty="emptyVd"
+      @seeking="seekingVd"
+      @timeupdate="timeupdateVd"
+      @stalled="stalledVd"
+      @abort="abortVd"
     ></video>
     <div class="bottom-tool" @mousemove="vp.clearVb()">
       <div class="pv-bar">
@@ -153,14 +164,72 @@ export default {
     },
   },
   methods: {
-    wait() {
-      console.log("播放暂停，等待下载更多数据");
+    // Video events
+    // 媒体已经收到开始播放的请求
+    playVd(){
+      this.$emit('play');
+    },
+    // 回放已经暂停
+    pauseVd(){
+      this.$emit('pause');
+    },
+    // 回放可以开始
+    canplayVd(){
+      this.$emit('canplay');
+      this.vp.useOnplay();
+    },
+    // 媒体已经播放完一遍，且停止了
+    endedVd(){
+      this.$emit('ended');
+      this.vp.useEnd();
+    },
+    // 回放暂停，以下载更多数据
+    waitingVd() {
+      this.$emit('waiting');
       this.show = true;
     },
-    canplay() {
-      console.log("播放继续");
+    // 回放可以继续，不应该中断，readState 为 3
+    canplaythroughVd() {
+      this.$emit('canplaythrough');
       this.show = false;
     },
+    // 下载期间发生了网络错误
+    errorVd(){
+      this.$emit('error');
+    },
+    // volume 或 muted 属性值发生了变化
+    volumechangeVd(){
+      this.$emit('volumechange');
+    },
+    // 网络连接关闭了
+    emptiedVd(){
+      this.$emit('emptied');
+    },
+    // 媒体播放速率发生变化
+    ratechangeVd(){
+      this.$emit('ratechange');
+    },
+    // 发生了错误，阻止媒体下载
+    emptyVd(){
+      this.$emit('empty');
+    },
+    // 回放已移动到新位置
+    seekingVd(){
+      this.$emit('seeking');
+    },
+    // currentTime 被非常规或意外地更改了
+    timeupdateVd(){
+      this.$emit('timeupdate');
+    },
+    // 浏览器尝试下载，但尚未收到数据
+    stalledVd(){
+      this.$emit('stalled');
+    },
+    // 下载被中断
+    abortVd(){
+       this.$emit('abort');
+    },
+    // ***
     full() {
       if (document.fullscreenElement) {
         this.tuichuquanping = true;
