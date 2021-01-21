@@ -1,10 +1,29 @@
 {
   "name": "vue-vam-video",
-  "version": "1.2.6",
+  "version": "1.2.8",
   "description": "Vue.js Custom video components",
   "main": "index.js",
-  "author": "maomincoding",
-  "keywords": ["video"],
-  "license": "ISC",
-  "private": false
+  "author": {
+    "name": "maomincoding",
+    "email": "17864296568@163.com",
+    "url": "https://www.maomin.club"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maomincoding/vue-vam-video.git"
+  },
+  "keywords": [
+    "vue-vam-video",
+    "vue video player",
+    "video player",
+    "vue player",
+    "vue video",
+    "video"
+  ],
+  "license": "MIT",
+  "private": false,
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  }
 }
