@@ -1,4 +1,4 @@
-# vue-vamvideo
+# vue-vam-video
 > Vue.js Custom video components
 
 ## Using documents
