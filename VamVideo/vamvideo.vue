@@ -158,6 +158,7 @@ export default {
           document.querySelector(".video-box"),
           this.properties
         );
+        this.checkMv();
       },
       deep: true,
     },
@@ -172,7 +173,7 @@ export default {
         );
       },
       deep: true,
-    }
+    },
   },
   emits: {
     timeupdate: null,
@@ -257,6 +258,18 @@ export default {
         this.vp.usePlay();
       }
     },
+    checkMv() {
+      if (
+        this.properties &&
+        this.properties.src &&
+        this.properties.src.substr(
+          this.properties.src.length - 4,
+          this.properties.src.length
+        ) === "m3u8"
+      ) {
+        this.onhls();
+      }
+    },
     onhls() {
       let script = document.createElement("script");
       script.type = "text/javascript";
@@ -307,16 +320,7 @@ export default {
     } else {
       this.vp = new VamVideo(document.querySelector(".video-box"));
     }
-    if (
-      this.properties &&
-      this.properties.src &&
-      this.properties.src.substr(
-        this.properties.src.length - 4,
-        this.properties.src.length
-      ) === "m3u8"
-    ) {
-      this.onhls();
-    }
+    this.checkMv();
   },
 };
 </script>
