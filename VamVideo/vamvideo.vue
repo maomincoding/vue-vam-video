@@ -151,6 +151,29 @@ export default {
     videoStyle: { type: Object },
     controlsConfig: { type: Object },
   },
+  watch: {
+    properties: {
+      handler() {
+        this.vp = new VamVideo(
+          document.querySelector(".video-box"),
+          this.properties
+        );
+      },
+      deep: true,
+    },
+    videoStyle: {
+      handler() {
+        this.vp = new VamVideo(
+          document.querySelector(".video-box"),
+          null,
+          Object.keys(this.videoStyle).length === 0
+            ? this.defaultStyle
+            : this.videoStyle
+        );
+      },
+      deep: true,
+    }
+  },
   emits: {
     timeupdate: null,
     play: null,
