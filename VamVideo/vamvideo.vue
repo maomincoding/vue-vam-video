@@ -122,30 +122,24 @@
     </div>
   </div>
 </template>
-
 <script>
-import { h } from 'vue';
-const isVue3 = typeof h === 'function';
-import {v2index} from './mixinv2.js'
-import {v3index} from './mixinv3.js'
+import { h } from "vue";
+const isVue3 = typeof h === "function";
+import { v2index } from "./mixinv2.js";
+import { v3index } from "./mixinv3.js";
 import VamVideo from "./vp.js";
 import load from "./load.vue";
 export default {
   name: "VamVideo",
-  components: {
-    load,
-  },
-   mixins:[isVue3?v3index:v2index],
+  components: { load },
+  mixins: [isVue3 ? v3index : v2index],
   data: () => ({
     vp: null,
     show: true,
     screen: true,
     shipinquanping: true,
     tuichuquanping: false,
-    defaultStyle: {
-      width: "1200px",
-      height: "600px",
-    },
+    defaultStyle: { width: "1200px", height: "600px" },
   }),
   computed: {
     controls: function () {
@@ -153,83 +147,77 @@ export default {
     },
   },
   props: {
-    properties: {
-      type: Object,
-    },
-    videoStyle: {
-      type: Object,
-    },
-    controlsConfig: {
-      type: Object,
-    },
+    properties: { type: Object },
+    videoStyle: { type: Object },
+    controlsConfig: { type: Object },
+  },
+  emits: {
+    timeupdate: null,
+    play: null,
+    pause: null,
+    canplay: null,
+    ended: null,
+    waiting: null,
+    canplaythrough: null,
+    error: null,
+    volumechange: null,
+    emptied: null,
+    ratechange: null,
+    empty: null,
+    seeking: null,
+    stalled: null,
+    abort: null,
   },
   methods: {
-    // Video events
-    // 媒体已经收到开始播放的请求
-    playVd(){
-      this.$emit('play');
+    playVd() {
+      this.$emit("play");
     },
-    // 回放已经暂停
-    pauseVd(){
-      this.$emit('pause');
+    pauseVd() {
+      this.$emit("pause");
     },
-    // 回放可以开始
-    canplayVd(){
-      this.$emit('canplay');
+    canplayVd() {
+      this.$emit("canplay");
       this.vp.useOnplay();
     },
-    // 媒体已经播放完一遍，且停止了
-    endedVd(){
-      this.$emit('ended');
+    endedVd() {
+      this.$emit("ended");
       this.vp.useEnd();
     },
-    // 回放暂停，以下载更多数据
     waitingVd() {
-      this.$emit('waiting');
+      this.$emit("waiting");
       this.show = true;
     },
-    // 回放可以继续，不应该中断，readState 为 3
     canplaythroughVd() {
-      this.$emit('canplaythrough');
+      this.$emit("canplaythrough");
       this.show = false;
     },
-    // 下载期间发生了网络错误
-    errorVd(){
-      this.$emit('error');
+    errorVd() {
+      this.$emit("error");
     },
-    // volume 或 muted 属性值发生了变化
-    volumechangeVd(){
-      this.$emit('volumechange');
+    volumechangeVd() {
+      this.$emit("volumechange");
     },
-    // 网络连接关闭了
-    emptiedVd(){
-      this.$emit('emptied');
+    emptiedVd() {
+      this.$emit("emptied");
     },
-    // 媒体播放速率发生变化
-    ratechangeVd(){
-      this.$emit('ratechange');
+    ratechangeVd() {
+      this.$emit("ratechange");
     },
-    // 发生了错误，阻止媒体下载
-    emptyVd(){
-      this.$emit('empty');
+    emptyVd() {
+      this.$emit("empty");
     },
-    // 回放已移动到新位置
-    seekingVd(){
-      this.$emit('seeking');
+    seekingVd() {
+      this.$emit("seeking");
     },
-    // currentTime 被非常规或意外地更改了
-    timeupdateVd(){
-      this.$emit('timeupdate');
+    timeupdateVd() {
+      this.$emit("timeupdate");
     },
-    // 浏览器尝试下载，但尚未收到数据
-    stalledVd(){
-      this.$emit('stalled');
+    stalledVd() {
+      this.$emit("stalled");
     },
-    // 下载被中断
-    abortVd(){
-       this.$emit('abort');
+    abortVd() {
+      this.$emit("abort");
     },
-    // ***
     full() {
       if (document.fullscreenElement) {
         this.tuichuquanping = true;
@@ -247,25 +235,20 @@ export default {
       }
     },
     onhls() {
-      // 创建script标签，引入外部文件
       let script = document.createElement("script");
       script.type = "text/javascript";
       script.src = "https://cdn.jsdelivr.net/hls.js/latest/hls.min.js";
       document.getElementsByTagName("head")[0].appendChild(script);
       script.onload = () => {
         console.log("hls.js资源加载成功");
-        // eslint-disable-next-line no-undef
         var hls = new Hls();
         hls.loadSource(this.properties.src);
         hls.attachMedia(document.querySelector(".video-player"));
-        // eslint-disable-next-line no-undef
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           console.log("加载成功");
         });
-        // eslint-disable-next-line no-undef
         hls.on(Hls.Events.ERROR, (event, data) => {
           console.log(event, data);
-          // 监听出错事件
           console.log("加载失败");
         });
       };
@@ -314,7 +297,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 @import "./css/iconfont/iconfont.css";
 @import "./css/index.css";
