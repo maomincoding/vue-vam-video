@@ -87,21 +87,6 @@
             </ul>
           </div>
           <div
-            class="pv-screen ml"
-            @click="vp.pageFullScreen()"
-            v-show="screen"
-            v-if="controls.pageFullScreen"
-          >
-            <i
-              class="iconfont icon-quanping"
-              :title="controls.pageFullScreenTit"
-            ></i>
-            <i
-              class="iconfont icon-huanyuan hide"
-              :title="controls.escPageFullScreenTit"
-            ></i>
-          </div>
-          <div
             class="pv-screens ml"
             @click="vp.fullScreen()"
             v-if="controls.fullScreen"
@@ -136,7 +121,6 @@ export default {
   data: () => ({
     vp: null,
     show: true,
-    screen: true,
     shipinquanping: true,
     tuichuquanping: false,
     defaultStyle: { width: "1200px", height: "600px" },
@@ -255,11 +239,9 @@ export default {
       if (document.fullscreenElement) {
         this.tuichuquanping = true;
         this.shipinquanping = false;
-        this.screen = false;
       } else {
         this.tuichuquanping = false;
         this.shipinquanping = true;
-        this.screen = true;
       }
     },
     keydown(ev) {
@@ -332,8 +314,7 @@ export default {
     this.checkMv();
   },
 };
-</script>
-<style scoped>
+</script> <style scoped>
 @import "./css/iconfont/iconfont.css";
 @import "./css/index.css";
 </style>

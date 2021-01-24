@@ -1,10 +1,8 @@
-// eslint-disable-next-line no-unused-vars
 function VamVideo(vp, attrObj, styleObj) {
   this.timer = null;
   this.dd = null;
   this.disX = 0;
   this.disL = 0;
-  this.isPageFullScreen = false;
   if (attrObj) {
     for (const key in attrObj) {
       if (Object.hasOwnProperty.call(attrObj, key) && key !== "controls") {
@@ -16,12 +14,6 @@ function VamVideo(vp, attrObj, styleObj) {
     for (const key in styleObj) {
       if (Object.hasOwnProperty.call(styleObj, key)) {
         $(".video-box").style[`${key}`] = styleObj[key];
-        key === "width"
-          ? (this.vbw = styleObj.width)
-          : (this.vbw = vp.offsetWidth);
-        key === "height"
-          ? (this.vbh = styleObj.height)
-          : (this.vbh = vp.offsetHeight);
       }
     }
   }
@@ -55,15 +47,6 @@ function VamVideo(vp, attrObj, styleObj) {
   };
   this.hideEl = function (el) {
     $(el).style.display = "none";
-  };
-  this.setVp = function (w, h) {
-    const _w = String(w).indexOf("px") != -1 ? w : w + "px";
-    const _h = String(h).indexOf("px") != -1 ? h : h + "px";
-    $(".video-player").style.width = _w;
-    $(".video-player").style.height = _h;
-    $(".video-box").style.width = _w;
-    $(".video-box").style.height = _h;
-    $(".pv-bar").style.width = _w;
   };
   // 底部控制栏(显示/隐藏)
   this.bottomTup = function () {
@@ -124,24 +107,6 @@ function VamVideo(vp, attrObj, styleObj) {
       this.showEl(".icon-jingyin");
       this.hideEl(".icon-yinliang");
       $(".video-player").muted = true;
-    }
-  };
-  // 页面全屏
-  this.pageFullScreen = function () {
-    const w = document.documentElement.clientWidth || document.body.clientWidth;
-    const h =
-      document.documentElement.clientHeight || document.body.clientHeight;
-    this.isPageFullScreen = !this.isPageFullScreen;
-    if (this.isPageFullScreen) {
-      this.setVp(w, h);
-      this.hideEl(".icon-quanping");
-      this.showEl(".icon-huanyuan");
-      this.hideEl(".pv-screens");
-    } else {
-      this.setVp(this.vbw, this.vbh);
-      this.showEl(".icon-quanping");
-      this.hideEl(".icon-huanyuan");
-      this.showEl(".pv-screens");
     }
   };
   // 视频全屏

@@ -79,15 +79,12 @@ export default {
       controlsConfig: {
         fullScreenTit:"全屏",
         EscfullScreenTit:"退出全屏",
-        pageFullScreenTit:"页面全屏",
-        escPageFullScreenTit:"退出页面全屏",
         speedTit:"倍速",
         yinliangTit:"音量",
         jingyinTit:"静音",
         playTit:"播放",
         pauseTit:"暂停",
         fullScreen:true,
-        pageFullScreen:true,
         speed:true,
         listen:true
       }
