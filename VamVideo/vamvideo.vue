@@ -153,7 +153,16 @@ export default {
   },
   watch: {
     properties: {
-      handler() {
+      handler(val) {
+        if (val.src) {
+          this.vp.showEl(".play-btn .icon-bofang");
+          this.vp.showEl(".mz .icon-bofang");
+          this.vp.hideEl(".play-btn .icon-zanting");
+          this.vp.hideEl(".mz .icon-zanting");
+          this.show = false;
+        } else {
+          this.show = true;
+        }
         this.vp = new VamVideo(
           document.querySelector(".video-box"),
           this.properties
