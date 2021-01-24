@@ -180,7 +180,9 @@ function VamVideo(vp, attrObj, styleObj) {
       }
       $(".pv-dot").style.left = L - 7 + "px";
       let scale = L / ($(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth);
-      $(".video-player").currentTime = scale * $(".video-player").duration;
+      if (scale * $(".video-player").duration) {
+        $(".video-player").currentTime = scale * $(".video-player").duration;
+      }
       nowTime();
     };
     document.onmouseup = function () {
@@ -210,7 +212,9 @@ function VamVideo(vp, attrObj, styleObj) {
         this.showEl(".icon-jingyin");
         this.hideEl(".icon-yinliang");
       }
-      $(".video-player").volume = scale;
+      if (scale >= 0) {
+        $(".video-player").volume = scale;
+      }
     };
     document.onmouseup = function () {
       document.onmousemove = null;
